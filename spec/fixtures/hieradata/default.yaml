@@ -1,0 +1,6 @@
+---
+libkv::url: 'consul://127.0.0.1:8500/puppet'
+libkv::url: 'consul+ssl://1.2.3.4:8501/puppet'
+libkv::url: 'file://'
+libkv::url: 'etcd://127.0.0.1:2380/puppet/%{environment}/'
+libkv::url: 'consul://127.0.0.1:8500/puppet/%{trusted.extensions.pp_department}/%{environment}'

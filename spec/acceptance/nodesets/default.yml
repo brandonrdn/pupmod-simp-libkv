@@ -1,17 +1,16 @@
-# This nodeset spins up a simple one-host test VM for both EL6 and EL7
 HOSTS:
   el7:
     roles:
       - server
-      - default
-      - master
+    masterless: true
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: vagrant
   el6:
     roles:
-      - agent
-      - client
+      - default
+      - server
+    masterless: true
     platform:   el-6-x86_64
     box:        centos/6
     hypervisor: vagrant

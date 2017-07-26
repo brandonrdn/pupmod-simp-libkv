@@ -39,10 +39,12 @@ class libkv::consul(
   }
   package { "unzip": }
   file { "/usr/bin/consul-acl":
+    ensure => 'file',
     mode   => "a+x",
     source => "puppet:///modules/libkv/consul/consul-acl"
   }
   file { "/usr/bin/consul-create-acl":
+    ensure => 'file',
     mode   => "a+x",
     source => "puppet:///modules/libkv/consul/consul-create-acl"
   }
