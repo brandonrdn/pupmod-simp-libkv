@@ -4,6 +4,7 @@ dist
 /pkg
 /spec/fixtures
 /spec/rp_env
+!/spec/fixtures/manifests/site.pp
 !/spec/hieradata/default.yaml
 !/spec/fixtures/site.pp
 /.rspec_system

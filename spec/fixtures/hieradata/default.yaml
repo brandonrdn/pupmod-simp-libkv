@@ -1,0 +1,6 @@
+---
+libkv::url: 'consul://127.0.0.1:8500/puppet'
+libkv::consul::server: 'true'
+libkv::consul::dont_copy_files: 'true'
+libkv::consul::bootstrap: 'true'
+libkv::consul::advertise: "%{::ipaddress_eth1}"

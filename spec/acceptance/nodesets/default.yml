@@ -1,0 +1,30 @@
+HOSTS:
+  el7:
+    roles:
+      - server
+    platform:   el-7-x86_64
+    box:        centos/7
+    hypervisor: vagrant
+  # el6:
+  #   roles:
+  #     - default
+  #     - server
+  #   platform:   el-6-x86_64
+  #   box:        centos/6
+  #   hypervisor: vagrant
+  el7agent:
+    roles:
+      - agent
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: vagrant
+  # el6agent:
+  #   roles:  
+  #     - agent
+  #   platform: el-6-x86_64
+  #   box: centos/6
+  #   hypervisor: vagrant
+CONFIG:
+  log_level: verbose
+  vagrant_memsize: 3072
+  ## vb_gui: true

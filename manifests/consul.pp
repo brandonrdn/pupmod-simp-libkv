@@ -4,34 +4,43 @@
 # This class uses solarkennedy/consul to initialize .
 #
 class libkv::consul(
-  $server = false,
-  $version = '0.8.5',
-  $use_puppet_pki = true,
-  $bootstrap = false,
-  $dont_copy_files = false,
-  $serverhost = undef,
-  $http_listen = '127.0.0.1',
-  $https_listen = '0.0.0.0',
-  $advertise = undef,
-  $datacenter = undef,
+  $firewall          = false,
+  $server            = false,
+  $version           = '0.8.5',
+  $use_puppet_pki    = true,
+  $bootstrap         = false,
+  $dont_copy_files   = false,
+  $serverhost        = undef,
+  $http_listen       = '127.0.0.1',
+  $https_listen      = '0.0.0.0',
+  $advertise         = undef,
+  $datacenter        = undef,
   $puppet_cert_path,
-  $ca_file_name = undef,
+  $ca_file_name      = undef,
   $private_file_name = undef,
-  $cert_file_name = undef,
-  $config_hash = undef,
-  $agent_token = undef,
+  $cert_file_name    = undef,
+  $config_hash       = undef,
+  $agent_token       = undef,
 ) {
   if ($firewall) {
-    $ports = [
-      '8300',
-      '8301',
-      '8302',
-      '8501',
+  $tcp_ports = [
+      8300,
+      8301,
+      8302,
+      8500,
+      8600,
     ]
-    $ports.each |$port| {
+  $udp_ports = [
+      8301,
+      8302,
+      8600,
+    ]
+    $tcp_ports.each |$port| {
       iptables::listen::tcp_stateful { "libkv::consul - tcp - ${port}":
         dports => $port,
       }
+    }
+    $udp_ports.each |$port|{
       iptables::listen::udp { "libkv::consul - udp - ${port}":
         dports => $port,
       }
@@ -39,18 +48,19 @@ class libkv::consul(
   }
   package { "unzip": }
   file { "/usr/bin/consul-acl":
-    mode   => "a+x",
+    ensure => 'file',
+    mode   => "a=rx,u+w",
     source => "puppet:///modules/libkv/consul/consul-acl"
   }
   file { "/usr/bin/consul-create-acl":
-    mode   => "a+x",
+    ensure => 'file',
+    mode   => "a=rx,u+w",
     source => "puppet:///modules/libkv/consul/consul-create-acl"
   }
   if ($bootstrap == true) {
     $_bootstrap_hash = { "bootstrap_expect" => 1 }
   } else {
-    $type = type($facts['consul_bootstrap'])
-    notify { "consul_bootstrap = ${type}": }
+    $type = $facts['consul_bootstrap']
     if ($facts["consul_bootstrap"] == "true") {
       $_bootstrap_hash = { "bootstrap_expect" => 1 }
       ## Create real token
@@ -220,8 +230,8 @@ class libkv::consul(
     'retry_join'     => [ $_serverhost ],
     'advertise_addr' => $_advertise,
     'addresses'      => {
-      'http'         => $http_listen,
-      'https'        => $https_listen,
+    'http'           => $http_listen,
+    'https'          => $https_listen,
     },
   }
   $merged_hash = $hash + $class_hash + $_datacenter + $config_hash + $_key_hash + $_token_hash + $_bootstrap_hash + $_cert_hash + $_uidir

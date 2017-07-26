@@ -4,5 +4,7 @@ fixtures:
     stdlib:   "https://github.com/simp/puppetlabs-stdlib.git"
     iptables: "https://github.com/simp/pupmod-simp-iptables.git"
     simplib:  "https://github.com/simp/pupmod-simp-simplib.git"
+    consul:   "https://github.com/solarkennedy/puppet-consul.git"
+    archive:  "https://github.com/voxpupuli/puppet-archive.git"
   symlinks:
     libkv: "#{source_dir}"
